@@ -51,8 +51,8 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.internal.DPIUtil;
 import org.eclipse.swt.internal.Library;
+import org.eclipse.swt.internal.chromium.BundleActivator;
 import org.eclipse.swt.internal.chromium.CEF;
 import org.eclipse.swt.internal.chromium.CEFFactory;
 import org.eclipse.swt.internal.chromium.CEFFactory.EvalReturned;
@@ -348,8 +348,8 @@ class Chromium extends WebBrowser {
     }
 
     private Point getChromiumSize() {
-    	Point size = chromium.getSize();
-    	return DPIUtil.autoScaleUp(size);
+    	return chromium.getSize();
+    	// return DPIUtil.autoScaleUp(size);
     }
 
     private void set_life_span_handler() {
