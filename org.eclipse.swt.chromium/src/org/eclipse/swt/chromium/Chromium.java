@@ -329,7 +329,7 @@ class Chromium extends WebBrowser {
         final org.eclipse.swt.graphics.Point size = getChromiumSize();
         final Display display = chromium.getDisplay();
         final Color bgColor = display.getSystemColor(SWT.COLOR_WIDGET_BACKGROUND);
-        int cefBgColor = cefColor(bgColor.getAlpha(), bgColor.getRed(), bgColor.getGreen(), bgColor.getBlue());
+        int cefBgColor = cefColor(1, bgColor.getRed(), bgColor.getGreen(), bgColor.getBlue());
         
         browser = lib.cefswt_create_browser(hwnd, url, clientHandler, size.x, size.y, jsEnabledOnNextPage ? 1 : 0, cefBgColor);
         if (browser != null) {
