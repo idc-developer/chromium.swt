@@ -4,6 +4,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Widget;
+import org.osgi.framework.Bundle;
 
 import jnr.ffi.LibraryLoader;
 import jnr.ffi.Pointer;
@@ -808,14 +809,15 @@ class Chromium extends WebBrowser {
                         + "Set env var SWT_GTK3=0");
             }
         }
-
+        
         String subDir = "chromium-" + CEFVERSION;
         File cefrustlib = null;
         try {
             String mapLibraryName = System.mapLibraryName(SHARED_LIB_V);
-            Enumeration<URL> fragments = Library.class.getClassLoader().getResources(subDir+"/chromium.properties");
-            while (fragments.hasMoreElements()) {
-                URL url = (URL) fragments.nextElement();
+            Enumeration<Bundle> bundles = BundleActivator.getBundlesForCopyingLibraries();//Library.class.getClassLoader().getResources(subDir+"/chromium.properties");
+            while (bundles.hasMoreElements()) {
+                Bundle bundle = (Bundle) bundles.nextElement();
+                URL url = bundle.getEntry("/"+subDir+"/chromium.properties");
                 try (InputStream is = url.openStream();) {
                     Properties props = new Properties();
                     props.load(is);
@@ -824,15 +826,13 @@ class Chromium extends WebBrowser {
                             String propValue = props.getProperty(prop);
                             Path path = Paths.get(propValue);
                             String fileName = path.getFileName().toString();
-                            if (!mapLibraryName.equals(fileName)) {
-                                ResourceExpander.findResource(path.getParent().toString(), fileName, false);
-                            }
+                            ResourceExpander.findResource(bundle, path.getParent().toString(), fileName, false);
                         }
                     }
                 }
             }
             
-            cefrustlib = ResourceExpander.findResource(subDir, mapLibraryName, false);
+            cefrustlib = ResourceExpander.findResource(null,  subDir, mapLibraryName, false);
         	cefrustPath = cefrustlib.getParentFile().getCanonicalPath();
         
             LibraryLoader<Lib> loader = LibraryLoader.create(Lib.class);

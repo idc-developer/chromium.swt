@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.function.Function;
 
 import org.eclipse.swt.internal.Library;
+import org.osgi.framework.Bundle;
 
 // TODO: copied from org.eclipse.swt.internal.Library, when merged into SWT thi
 // can be removed by allowing findResource to not look into internal OSGi resource url
@@ -50,7 +52,7 @@ public class ResourceExpander {
      * @param resourceName e.g swt-webkitgtk
      * @param mapResourceName  true if you like platform specific mapping applied to resource name. e.g  MyLib -> libMyLib-gtk-4826.so
      */
-    public static File findResource(String subDir, String resourceName, boolean mapResourceName){
+    public static File findResource(Bundle bundle, String subDir, String resourceName, boolean mapResourceName){
 
         //We construct a 'maybe' subdirectory path. 'Maybe' because if no subDir given, then it's an empty string "".
                                                                                  //       subdir  e.g:  subdir
@@ -106,7 +108,7 @@ public class ResourceExpander {
                 }
 
                 StringBuilder message = new StringBuilder("");
-                if (extract(file.getPath(), maybeSubDirPath + finalResourceName, message)) {
+                if (extract(bundle, file.getPath(), maybeSubDirPath + finalResourceName, message)) {
                     if (file.exists()) {
                         return file;
                     }
@@ -123,14 +125,16 @@ public class ResourceExpander {
      * @param mappedName file to be searched in jar.
      * @return  true upon success, failure if something went wrong.
      */
-    static boolean extract (String extractToFilePath, String mappedName, StringBuilder message) {
+    static boolean extract (Bundle bundle, String extractToFilePath, String mappedName, StringBuilder message) {
         FileOutputStream os = null;
         InputStream is = null;
         File file = new File(extractToFilePath);
         boolean extracted = false;
         try {
             if (!file.exists ()) {
-                is = Library.class.getResourceAsStream ("/" + mappedName.replace('\\', '/')); //$NON-NLS-1$
+            	URL url= bundle.getEntry("/" + mappedName.replace("\\", "/"));
+            	is = url.openStream();
+                // is = Library.class.getResourceAsStream ("/" + mappedName.replace('\\', '/')); //$NON-NLS-1$
                 if (is != null) {
                     extracted = true;
                     int read;

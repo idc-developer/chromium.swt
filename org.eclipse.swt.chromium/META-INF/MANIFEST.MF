@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Chromium SWT Browser
-Bundle-SymbolicName: org.eclipse.swt.chromium
+Bundle-SymbolicName: org.eclipse.swt.chromium;singleton:=true
 Bundle-Version: 0.7.0.qualifier
 Bundle-Vendor: Make Technology
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
@@ -9,6 +9,9 @@ Require-Bundle: org.eclipse.swt,
  com.github.jnr.ffi,
  com.github.jnr.jffi,
  jnr.x86asm,
- org.objectweb.asm
+ org.objectweb.asm,
+ org.eclipse.osgi;bundle-version="3.11.3"
 Export-Package: org.eclipse.swt.chromium
 Automatic-Module-Name: org.eclipse.swt.chromium
+Bundle-Activator: org.eclipse.swt.internal.chromium.BundleActivator
+Bundle-ActivationPolicy: lazy
