@@ -10,7 +10,7 @@ Require-Bundle: org.eclipse.swt,
  com.github.jnr.jffi,
  jnr.x86asm,
  org.objectweb.asm,
- org.eclipse.osgi;bundle-version="3.11.3"
+ org.eclipse.osgi
 Export-Package: org.eclipse.swt.chromium
 Automatic-Module-Name: org.eclipse.swt.chromium
 Bundle-Activator: org.eclipse.swt.internal.chromium.BundleActivator
